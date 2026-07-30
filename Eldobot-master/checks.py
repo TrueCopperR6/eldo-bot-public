@@ -6,7 +6,12 @@ import shared_info
 serversList = shared_info.serversList
 
 def server_check(id, name):
-    default = serversList['default']
+    default = serversList.get("default")
+
+    if default is None:
+        raise RuntimeError(
+            "Default server configuration was not created."
+        )
     id = str(id)
     if id in serversList:
         for d, v in default.items():
