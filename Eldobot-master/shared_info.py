@@ -43,23 +43,45 @@ curdate = datetime.today().strftime('%Y-%m-%d')
 
 # Retry loading servers.json — volume mount may not be ready immediately
 serversList = {}
+
 for _attempt in range(5):
     try:
-        with open(data_path('servers.json'), 'rb') as f:
+        with open(data_path("servers.json"), "rb") as f:
             content = f.read()
         if content:
             serversList = orjson.loads(content)
             break
-    except (orjson.JSONDecodeError, FileNotFoundError):
+    except (FileNotFoundError, orjson.JSONDecodeError):
         pass
-    print(f"Waiting for servers.json (attempt {_attempt + 1}/5)...")
-    time.sleep(2)
+    time.sleep(1)
 
-if 'default' in serversList:
-    serversList['default'].update({'rookieoptions':0.0})
-    serversList['default'].update({'aimedia':0})
-    serversList['default'].update({'tradeapproval':'off'})
-    serversList['default'].update({'poschanges':'on'})
+# Create a fresh configuration if none exists
+if "default" not in serversList:
+    print("No servers.json found - creating a new one.")
+
+    serversList = {
+        "default": {
+            "name": "",
+            "prefix": "-",
+            "tradechannel": "",
+            "draftStatus": {
+                "draftRunning": False
+            },
+            "rookieoptions": 0.0,
+            "aimedia": 0,
+            "tradeapproval": "off",
+            "poschanges": "on"
+        }
+    }
+
+    with open(data_path("servers.json"), "wb") as f:
+        f.write(orjson.dumps(serversList))
+
+else:
+    serversList["default"].setdefault("rookieoptions", 0.0)
+    serversList["default"].setdefault("aimedia", 0)
+    serversList["default"].setdefault("tradeapproval", "off")
+    serversList["default"].setdefault("poschanges", "on")
 
 serverExports = {}
 export_last_access = {}  # str(guild_id) -> time.time() of last access
