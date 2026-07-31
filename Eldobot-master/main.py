@@ -394,7 +394,7 @@ async def on_message(message):
                                 import traceback
                                 traceback.print_exc()
                                 try:
-                                    with sentry_sdk.push_scope() as scope:
+                                    with sentry_sdk.new_scope() as scope:
                                         scope.set_tag("command", command)
                                         scope.set_tag("guild_id", str(message.guild.id) if message.guild else "dm")
                                         scope.set_context("invocation", {
