@@ -23,10 +23,10 @@ def merge_defaults(server, default):
         elif isinstance(v, dict) and isinstance(server[k], dict):
             merge_defaults(server[k], v)
             if id in serversList:
-        merge_defaults(serversList[id], default)
-    else:
-        serversList[id] = copy.deepcopy(default)
-        else:
-            serversList[id] = copy.deepcopy(default)
+                merge_defaults(serversList[id], default)
+                    else:
+                        serversList[id] = copy.deepcopy(default)
+                    else:
+                        serversList[id] = copy.deepcopy(default)
     serversList[id]['name'] = name
     return(serversList)
