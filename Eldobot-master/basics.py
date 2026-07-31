@@ -24,19 +24,23 @@ bot = shared_info.bot
 
 def clean_priorities(db):
     for n, s in db.items():
-        offers = s['offers']
-        offers = sorted(offers, key=lambda o: o['priority'])
-        teams = []
-        for o in offers:
-            teams.append(o['team'])
-        teams = set(teams)
-        teams = list(teams)
+        if "offers" not in s:
+            print(f"Server {n} is missing 'offers'")
+            print("Keys:", list(s.keys()))
+            s["offers"] = []      # temporary fix
+            continue
+
+        offers = sorted(s["offers"], key=lambda o: o["priority"])
+
+        teams = list(set(o["team"] for o in offers))
+
         for t in teams:
             pri = 1
             for o in offers:
-                if o['team'] == t:
-                    o['priority'] = pri
+                if o["team"] == t:
+                    o["priority"] = pri
                     pri += 1
+
     return db
 
 
