@@ -24,9 +24,9 @@ def merge_defaults(server, default):
             merge_defaults(server[k], v)
             if id in serversList:
                 merge_defaults(serversList[id], default)
-                    else:
-                        serversList[id] = copy.deepcopy(default)
-                    else:
-                        serversList[id] = copy.deepcopy(default)
+                else:
+                    serversList[id] = copy.deepcopy(default)
+                else:
+                    serversList[id] = copy.deepcopy(default)
     serversList[id]['name'] = name
     return(serversList)
